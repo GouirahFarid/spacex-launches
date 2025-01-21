@@ -2,7 +2,7 @@
 <script lang="ts" setup>
 import {onMounted, ref, watch} from 'vue'
 import {useSpaceX} from '@/composables/useSpaceX'
-import type {Launch, LaunchFilter} from './types/launch'
+import type {Launch, LaunchFilter} from '@/types/launch'
 import LaunchModal from '@/components/LaunchModal.vue'
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
