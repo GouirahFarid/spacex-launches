@@ -1,13 +1,13 @@
 # SpaceX Launches Viewer
 
 ## Description
-Une application Vue.js qui affiche les lancements SpaceX, permettant de visualiser les détails des lancements passés et à venir. L'application utilise l'API publique SpaceX v4.
+Une application Vue.js qui affiche les lancements SpaceX, permettant de visualiser les détails des lancements passés et à venir. L'application utilise l'API publique SpaceX.
 
 ## Technologies Utilisées
 - Vue.js 3 (Composition API)
 - TypeScript
 - Tailwind CSS
-- API SpaceX v4
+- API SpaceX
 - Vite
 ## Fonctionnalités
 - Affichage du prochain lancement avec compte à rebours
