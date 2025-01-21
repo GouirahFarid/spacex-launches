@@ -1,10 +1,11 @@
 # src/App.vue
-<script lang="ts" setup>
-import {onMounted, ref, watch} from 'vue'
-import {useSpaceX} from '@/composables/useSpaceX'
-import type {Launch, LaunchFilter} from '@/types/launch'
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue'
+import { useSpaceX } from '@/composables/useSpaceX'
+import type { Launch, LaunchFilter } from '@/types/launch'
+import LaunchList from '@/components/LaunchList.vue'
 import LaunchModal from '@/components/LaunchModal.vue'
-import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const spacex = useSpaceX()
 const nextLaunch = ref<Launch | null>(null)
@@ -35,6 +36,11 @@ const updateCountdown = () => {
   const launchDate = new Date(nextLaunch.value.date_utc)
   const now = new Date()
   const diff = launchDate.getTime() - now.getTime()
+
+  if (diff <= 0) {
+    countdown.value = "Lancement déjà effectué"
+    return
+  }
 
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -75,38 +81,39 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen bg-gray-900 text-white p-8">
-    <h1 class="text-4xl font-bold text-center mb-12">SpaceX Launches</h1>
+    <div class="space-y-8">
+      <h1 class="text-4xl font-bold text-center">SpaceX Launches</h1>
 
-    <div v-if="error" class="bg-red-500 text-white p-4 rounded-lg mb-8">
-      {{ error }}
-      <button
-          class="ml-4 underline hover:no-underline"
-          @click="fetchData"
-      >
-        Try again
-      </button>
-    </div>
+      <!-- Error Message -->
+      <div v-if="error" class="bg-red-500 text-white p-4 rounded-lg">
+        {{ error }}
+        <button
+            class="ml-4 underline hover:no-underline"
+            @click="fetchData"
+        >
+          Réessayer
+        </button>
+      </div>
 
-    <LoadingSpinner v-if="isLoading" class="my-12"/>
+      <LoadingSpinner v-if="isLoading"/>
 
-    <!-- Next Launch Section -->
-    <div v-if="nextLaunch" class="bg-gray-800 rounded-lg p-6 mb-8">
-      <h2 class="text-2xl font-bold mb-4">Next Launch</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <p class="text-xl">{{ nextLaunch.name }}</p>
-          <p class="text-gray-400">
-            {{ new Date(nextLaunch.date_utc).toLocaleDateString() }}
-          </p>
-        </div>
-        <div class="text-right">
-          <p class="text-xl font-mono">{{ countdown }}</p>
+      <!-- Next Launch Section -->
+      <div v-if="nextLaunch" class="bg-gray-800 rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">Prochain Lancement</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-xl">{{ nextLaunch.name }}</p>
+            <p class="text-gray-400">
+              {{ new Date(nextLaunch.date_utc).toLocaleDateString() }}
+            </p>
+          </div>
+          <div class="text-right">
+            <p class="text-xl font-mono">{{ countdown }}</p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Launch Filter -->
-    <div class="mb-8">
+      <!-- Launch Filter -->
       <select
           v-model="selectedFilter"
           class="bg-gray-800 text-white rounded px-4 py-2 w-full max-w-xs"
@@ -115,38 +122,19 @@ onMounted(async () => {
         <option value="success">Lancements réussis</option>
         <option value="failed">Lancements échoués</option>
       </select>
-    </div>
 
-    <!-- Launch List -->
-    <div class="grid gap-4">
-      <div
-          v-for="launch in launches"
-          :key="launch.id"
-          class="bg-gray-800 rounded-lg p-4 cursor-pointer hover:bg-gray-700 transition-colors"
-          @click="openLaunchModal(launch)"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-xl font-semibold">{{ launch.name }}</h3>
-            <p class="text-gray-400">
-              {{ new Date(launch.date_utc).toLocaleDateString() }}
-            </p>
-          </div>
-          <div
-              :class="launch.success ? 'bg-green-600' : 'bg-red-600'"
-              class="px-3 py-1 rounded-full"
-          >
-            {{ launch.success ? 'Success' : 'Failed' }}
-          </div>
-        </div>
-      </div>
-    </div>
+      <!-- Launch List -->
+      <LaunchList
+          :launches="launches"
+          @select="openLaunchModal"
+      />
 
-    <!-- Launch Modal -->
-    <LaunchModal
-        v-if="showModal"
-        :launch="selectedLaunch"
-        @close="showModal = false"
-    />
+      <!-- Launch Modal -->
+      <LaunchModal
+          v-if="showModal"
+          :launch="selectedLaunch"
+          @close="showModal = false"
+      />
+    </div>
   </div>
 </template>
