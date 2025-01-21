@@ -1,8 +1,8 @@
 # src/App.vue
-<script setup lang="ts">
-import {ref, onMounted, watch} from 'vue'
-import { useSpaceX } from '@/composables/useSpaceX'
-import type { Launch, LaunchFilter } from './types/launch'
+<script lang="ts" setup>
+import {onMounted, ref, watch} from 'vue'
+import {useSpaceX} from '@/composables/useSpaceX'
+import type {Launch, LaunchFilter} from './types/launch'
 import LaunchModal from '@/components/LaunchModal.vue'
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
@@ -80,14 +80,14 @@ onMounted(async () => {
     <div v-if="error" class="bg-red-500 text-white p-4 rounded-lg mb-8">
       {{ error }}
       <button
-          @click="fetchData"
           class="ml-4 underline hover:no-underline"
+          @click="fetchData"
       >
         Try again
       </button>
     </div>
 
-    <LoadingSpinner v-if="isLoading" class="my-12" />
+    <LoadingSpinner v-if="isLoading" class="my-12"/>
 
     <!-- Next Launch Section -->
     <div v-if="nextLaunch" class="bg-gray-800 rounded-lg p-6 mb-8">
@@ -133,8 +133,8 @@ onMounted(async () => {
             </p>
           </div>
           <div
-              class="px-3 py-1 rounded-full"
               :class="launch.success ? 'bg-green-600' : 'bg-red-600'"
+              class="px-3 py-1 rounded-full"
           >
             {{ launch.success ? 'Success' : 'Failed' }}
           </div>

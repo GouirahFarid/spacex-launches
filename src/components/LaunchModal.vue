@@ -1,7 +1,7 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import type { Launch, Payload, Launchpad } from '@/types/launch'
-import { useSpaceX } from '@/composables/useSpaceX'
+<script lang="ts" setup>
+import {onMounted, ref} from 'vue'
+import type {Launch, Launchpad, Payload} from '@/types/launch'
+import {useSpaceX} from '@/composables/useSpaceX'
 
 const props = defineProps<{
   launch: Launch | null
@@ -20,7 +20,7 @@ const fetchDetails = async () => {
   if (!props.launch) return
 
   try {
-    // Fetch launchpad details
+    // Fetch launch details
     launchpad.value = await spacex.getLaunchpadDetails(props.launch.id)
 
     // Fetch payload details
@@ -43,8 +43,8 @@ onMounted(fetchDetails)
       <div class="flex justify-between items-start mb-6">
         <h2 class="text-2xl font-bold">{{ launch.name }}</h2>
         <button
-            @click="emit('close')"
             class="text-gray-400 hover:text-white"
+            @click="emit('close')"
         >
           ×
         </button>
@@ -63,8 +63,8 @@ onMounted(fetchDetails)
         <!-- Mission Patch -->
         <img
             v-if="launch.links.patch.large"
-            :src="launch.links.patch.large"
             :alt="launch.name"
+            :src="launch.links.patch.large"
             class="max-w-xs mx-auto"
         />
 
@@ -94,8 +94,8 @@ onMounted(fetchDetails)
           <a
               v-if="launch.links.article"
               :href="launch.links.article"
-              target="_blank"
               class="text-blue-400 hover:underline block"
+              target="_blank"
           >
             Read Article
           </a>
@@ -104,20 +104,20 @@ onMounted(fetchDetails)
           <div v-if="launch.links.webcast">
             <label class="flex items-center cursor-pointer">
               <input
-                  type="checkbox"
                   v-model="showVideo"
                   class="form-checkbox h-5 w-5 text-blue-600"
+                  type="checkbox"
               >
               <span class="ml-2">Show Mission Video</span>
             </label>
 
             <div v-if="showVideo" class="mt-4">
               <iframe
-                  class="w-full aspect-video rounded"
                   :src="`https://www.youtube.com/embed/${launch.links.webcast.split('v=')[1]}`"
-                  frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen
+                  class="w-full aspect-video rounded"
+                  frameborder="0"
               ></iframe>
             </div>
           </div>

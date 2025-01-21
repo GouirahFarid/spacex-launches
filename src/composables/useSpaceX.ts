@@ -1,7 +1,7 @@
-import type { Launch, Payload, Launchpad } from '@/types/launch'
+import type {Launch, Launchpad, Payload} from '@/types/launch'
 
 export function useSpaceX() {
-    const BASE_URL = 'https://api.spacexdata.com/v4'
+    const BASE_URL = 'https://api.spacexdata.com/latest'
 
     const getNextLaunch = async (): Promise<Launch> => {
         const response = await fetch(`${BASE_URL}/launches/next`)
@@ -10,7 +10,7 @@ export function useSpaceX() {
 
     const getLatestLaunches = async (filter: 'all' | 'success' | 'failed', limit: number = 10): Promise<Launch[]> => {
         const query = {
-            query: filter === 'all' ? {} : { success: filter === 'success' },
+            query: filter === 'all' ? {} : {success: filter === 'success'},
             options: {
                 limit,
                 sort: {
@@ -28,7 +28,7 @@ export function useSpaceX() {
         })
 
         const data = await response.json()
-        return data.docs
+        return data?.docs
     }
 
     const getPayloadDetails = async (payloadId: string): Promise<Payload> => {
