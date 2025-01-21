@@ -12,6 +12,7 @@ export interface Launch {
         };
         webcast: string | null;
         article: string | null;
+        youtube_id: string | null
     };
     launchpad: string;
     payloads: string[];
