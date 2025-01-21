@@ -113,7 +113,7 @@ onMounted(fetchDetails)
 
             <div v-if="showVideo" class="mt-4">
               <iframe
-                  :src="`https://www.youtube.com/embed/${launch.links.webcast.split('v=')[1]}`"
+                  :src="`https://www.youtube.com/embed/${launch.links.youtube_id}`"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen
                   class="w-full aspect-video rounded"
